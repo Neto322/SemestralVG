@@ -40,7 +40,7 @@ public class ConnectionManager : MonoBehaviour
     {
 
         float X = Random.Range(-5.0f, 5.0f);
-        float Y = Random.Range(-5.0f, 5.0f);
+        float Y = 3;
 
         return new Vector3(X,Y,0);
 
