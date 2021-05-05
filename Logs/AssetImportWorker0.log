@@ -378,3 +378,147 @@ Received Import Request.
 Start importing Assets/Scenes/SampleScene.unity using Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '988c22a5fa80bdc46d2b7fb594fadfdf') in 0.003016 seconds
   Import took 0.010439 seconds .
 
+========================================================================
+Received Import Request.
+  Time since last request: 569.818531 seconds.
+  path: Assets/Animations
+  artifactKey: Guid(b12e34f9772640473915fac163a7d8fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations using Guid(b12e34f9772640473915fac163a7d8fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '101cc75207139cba323efffb70d4e5f0') in 0.002221 seconds
+  Import took 0.008945 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 77.745088 seconds.
+  path: Assets/Animations/anim_Angry.fbx
+  artifactKey: Guid(8ea0155378db072d4853ea046563419c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Angry.fbx using Guid(8ea0155378db072d4853ea046563419c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d22aafb3b4b4ad43ac98824555602b8') in 0.011565 seconds
+  Import took 0.018554 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001553 seconds.
+  path: Assets/Animations/anim_Hurricane Kick.fbx
+  artifactKey: Guid(30f1e151d3f4054efa095d31208ff6d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Hurricane Kick.fbx using Guid(30f1e151d3f4054efa095d31208ff6d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '718866fcb13be7b50f1fe45c6eaeee00') in 0.011137 seconds
+  Import took 0.017756 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000920 seconds.
+  path: Assets/Animations/anim_Chapa 2.fbx
+  artifactKey: Guid(6d36fa4714474632cb3635216a14d9a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Chapa 2.fbx using Guid(6d36fa4714474632cb3635216a14d9a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4d64d91700737c37fa53cda6c156e432') in 0.016391 seconds
+  Import took 0.026240 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002507 seconds.
+  path: Assets/Animations/anim_Idle.fbx
+  artifactKey: Guid(ba01c68ac3b832ecfbc2ac17ca567534) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Idle.fbx using Guid(ba01c68ac3b832ecfbc2ac17ca567534) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '176b9b41e2c717d96a005080bb574e0c') in 0.009424 seconds
+  Import took 0.018866 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000646 seconds.
+  path: Assets/Animations/anim_Sitting Yell.fbx
+  artifactKey: Guid(e5c0d4897f50c1625aad8c03de01c5d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Sitting Yell.fbx using Guid(e5c0d4897f50c1625aad8c03de01c5d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3cacaead871fd18a76c28f26397469d9') in 0.008038 seconds
+  Import took 0.014973 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000042 seconds.
+  path: Assets/Animations/anim_Dancing.fbx
+  artifactKey: Guid(0fc2325796895e57aaf562cf931a62c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Dancing.fbx using Guid(0fc2325796895e57aaf562cf931a62c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9942c9ce1def1d8df6627d82dbbbc3d1') in 0.015764 seconds
+  Import took 0.025577 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000047 seconds.
+  path: Assets/Animations/anim_Floating.fbx
+  artifactKey: Guid(1ea42c9452570e3fa99494022d5a3a9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Floating.fbx using Guid(1ea42c9452570e3fa99494022d5a3a9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a5fe08d8f67cd3e8721b1541f0cd6c75') in 0.010387 seconds
+  Import took 0.017356 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000049 seconds.
+  path: Assets/Animations/anim_Sad Idle.fbx
+  artifactKey: Guid(4f92ffcbb5caee310b7f9a7d83ad308f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Sad Idle.fbx using Guid(4f92ffcbb5caee310b7f9a7d83ad308f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd0fc38aa58274c70bfaae43359eeab12') in 0.011859 seconds
+  Import took 0.017739 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000619 seconds.
+  path: Assets/Animations/anim_Defeated.fbx
+  artifactKey: Guid(1e44e000952b179529b62679eaf341ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Defeated.fbx using Guid(1e44e000952b179529b62679eaf341ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '832a4f4dc7604d6f252e1e5222fed316') in 0.011223 seconds
+  Import took 0.018822 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001459 seconds.
+  path: Assets/Animations/anim_Thankful.fbx
+  artifactKey: Guid(4ecc38d8e13567b47a5bd1d31111b50a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Thankful.fbx using Guid(4ecc38d8e13567b47a5bd1d31111b50a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ab145c398925eccd190b8a80cd4fc1d5') in 0.010217 seconds
+  Import took 0.019944 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003222 seconds.
+  path: Assets/Animations/anim_Shuffling.fbx
+  artifactKey: Guid(5c97cbfa55d550498895e0464453374d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Shuffling.fbx using Guid(5c97cbfa55d550498895e0464453374d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '54db67ff9707ac248917f4f21b68e2a9') in 0.013901 seconds
+  Import took 0.023804 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000588 seconds.
+  path: Assets/Animations/anim_Throw.fbx
+  artifactKey: Guid(21d0c233ac64b3ac7a66f5a14ef24f26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Throw.fbx using Guid(21d0c233ac64b3ac7a66f5a14ef24f26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '363cfd21e0a67279f6e89355da3dda28') in 0.011734 seconds
+  Import took 0.018379 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001201 seconds.
+  path: Assets/Animations/anim_Drunk Run Forward.fbx
+  artifactKey: Guid(1c34f4cbb6dc8786d8106cce4fab0438) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Drunk Run Forward.fbx using Guid(1c34f4cbb6dc8786d8106cce4fab0438) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6268c6de92821292ce6e7cad62dd25f6') in 0.009292 seconds
+  Import took 0.015352 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000610 seconds.
+  path: Assets/Animations/anim_Salute.fbx
+  artifactKey: Guid(54cf6fdb4d31c1bd0bd669340eda2a5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Salute.fbx using Guid(54cf6fdb4d31c1bd0bd669340eda2a5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '336886d791179a9a1a904eab72346704') in 0.010448 seconds
+  Import took 0.017124 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000538 seconds.
+  path: Assets/Animations/anim_Punching.fbx
+  artifactKey: Guid(52cc67b8c1cced95c8ab7597f0ac5d18) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Punching.fbx using Guid(52cc67b8c1cced95c8ab7597f0ac5d18) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '15bd95927f6726da16b82b0e15949106') in 0.009757 seconds
+  Import took 0.016553 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000501 seconds.
+  path: Assets/Animations/anim_Fast Run.fbx
+  artifactKey: Guid(610b7d5425e3a6beb908c773adb0d61b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Fast Run.fbx using Guid(610b7d5425e3a6beb908c773adb0d61b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '850ef4d5d9393c7ca88c2a5857384114') in 0.010850 seconds
+  Import took 0.019425 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000043 seconds.
+  path: Assets/Animations/anim_Gangnam Style.fbx
+  artifactKey: Guid(54d6d62a07d64d259a9f9b8399640dcd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/anim_Gangnam Style.fbx using Guid(54d6d62a07d64d259a9f9b8399640dcd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '33e0f8f294aa6142f686b6c76c5edafb') in 0.015302 seconds
+  Import took 0.021668 seconds .
+
