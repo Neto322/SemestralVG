@@ -9,9 +9,12 @@ public class ConnectionManager : MonoBehaviour
 {   
     Vector3 Position;
 
+    [SerializeField]
+    GameObject UI;
     //Pasa del lado del server.
     public void Host()
     {
+        UI.SetActive(false);
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.StartHost(RandomPosition(),Quaternion.identity);
     }
@@ -24,6 +27,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void Join()
     {
+        UI.SetActive(false);
         NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.ASCII.GetBytes("Password1234");
         NetworkManager.Singleton.StartClient();
     }

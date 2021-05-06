@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MLAPI;
-public class Character : NetworkBehaviour
+using MLAPI.Messaging;
+public class Playerr : NetworkBehaviour
 {
-    InputActions inputActions;
+
+  
+     InputActions inputActions;
    
     Rigidbody rigidbody;
 
@@ -19,6 +22,7 @@ public class Character : NetworkBehaviour
 
     Quaternion targetRotation;
 
+    [SerializeField]
     Animator anim;
 
     [SerializeField]
@@ -31,8 +35,8 @@ public class Character : NetworkBehaviour
         inputActions = new InputActions();
         rigidbody = GetComponent<Rigidbody>();
         cam = Camera.main.transform;
-        anim = GetComponent<Animator>();
 
+        
     }
 
   
@@ -51,6 +55,7 @@ public class Character : NetworkBehaviour
 
     
     private void Start() {
+        
     }
 
     // Update is called once per frame
@@ -67,6 +72,7 @@ public class Character : NetworkBehaviour
                 targetRotation = Quaternion.Euler(0,angle,0);
                 transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
             }
+            
             rigidbody.AddForce(MovementAxis * speed * Time.deltaTime,ForceMode.Impulse);
 
 
@@ -76,7 +82,7 @@ public class Character : NetworkBehaviour
         }
     }
 
-
+ 
     private void LateUpdate() {
         if(IsLocalPlayer)
         {
@@ -91,8 +97,7 @@ public class Character : NetworkBehaviour
             BlendValue = rigidbody.velocity.magnitude / maxSpeed;
 
             BlendValue = Mathf.Clamp(BlendValue,0,1);
-            
-           
+        
             anim.SetFloat("Blending",BlendValue);
             
             
@@ -103,5 +108,6 @@ public class Character : NetworkBehaviour
 
     Vector3 MovementAxis => new Vector3(AxisInput.x, 0f, AxisInput.y);
 
+   
 
 }
