@@ -77,7 +77,7 @@ public class Playerr : NetworkBehaviour
 
 
             rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
-
+            
 
         }
     }
@@ -92,7 +92,10 @@ public class Playerr : NetworkBehaviour
 
             } 
 
-
+            if(inputActions.Movement.Action.triggered)
+            {
+                anim.SetTrigger("Punch");
+            }
             
             BlendValue = rigidbody.velocity.magnitude / maxSpeed;
 
@@ -100,7 +103,7 @@ public class Playerr : NetworkBehaviour
         
             anim.SetFloat("Blending",BlendValue);
             
-            
+
 
         }
     }
