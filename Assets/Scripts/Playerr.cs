@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using MLAPI;
 using MLAPI.Messaging;
+using TMPro;
+using MLAPI.Transports.PhotonRealtime;
 public class Playerr : NetworkBehaviour
 {
 
@@ -29,6 +31,13 @@ public class Playerr : NetworkBehaviour
    float maxSpeed;
 
    float BlendValue;
+
+   [SerializeField]
+   TextMeshPro textMeshPro;
+
+   PhotonRealtimeTransport transport;
+
+   public string nombre;
     void Awake()
     {
         
@@ -37,32 +46,34 @@ public class Playerr : NetworkBehaviour
         cam = Camera.main.transform;
 
         
+        
     }
 
   
     private void OnEnable() {
-       
+      
        inputActions.Enable();
-
-        
+       
     }
 
     private void OnDisable() {
-       
+      
        inputActions.Disable();
-        
+       
     }
 
     
     private void Start() {
-        
+        transport = NetworkManager.Singleton.GetComponent<PhotonRealtimeTransport>();
+
+        textMeshPro.text = transport.Client.LocalPlayer.NickName;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(IsLocalPlayer)
-        {
+       if(IsOwner)
+       {
             if(AxisInput != Vector2.zero)
             {
                 
@@ -77,36 +88,44 @@ public class Playerr : NetworkBehaviour
 
 
             rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
+       }
             
-
-        }
+            
+        
+       
     }
 
  
     private void LateUpdate() {
-        if(IsLocalPlayer)
-        {
-            if(AxisInput != Vector2.zero)
-            {
-                anim.SetBool("Move",true);
+       if(IsOwner)
+       {
+           if(AxisInput != Vector2.zero)
+                {
+                    anim.SetBool("Move",true);
 
-            } 
+                } 
 
-            if(inputActions.Movement.Action.triggered)
-            {
-                anim.SetTrigger("Punch");
-            }
+                if(inputActions.Movement.Action.triggered)
+                {
+                    anim.SetTrigger("Punch");
+                }
+                
+                BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+
+                BlendValue = Mathf.Clamp(BlendValue,0,1);
             
-            BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+                anim.SetFloat("Blending",BlendValue);
+       }
+            
+            
 
-            BlendValue = Mathf.Clamp(BlendValue,0,1);
+
+            
+
         
-            anim.SetFloat("Blending",BlendValue);
-            
-
-
-        }
     }
+
+    
     Vector2 AxisInput => inputActions.Movement.Axis.ReadValue<Vector2>();
 
     Vector3 MovementAxis => new Vector3(AxisInput.x, 0f, AxisInput.y);

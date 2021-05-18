@@ -11,12 +11,20 @@ public class ConnectionManager : MonoBehaviour
 
     [SerializeField]
     GameObject UI;
+
+
+    
+
     //Pasa del lado del server.
     public void Host()
     {
         UI.SetActive(false);
+      
+
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.StartHost(RandomPosition(),Quaternion.identity);
+
+        
     }
 
     private void ApprovalCheck(byte[] connectionData, ulong clientID, NetworkManager.ConnectionApprovedDelegate callback)
@@ -28,6 +36,8 @@ public class ConnectionManager : MonoBehaviour
     public void Join()
     {
         UI.SetActive(false);
+
+        
         NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.ASCII.GetBytes("Password1234");
         NetworkManager.Singleton.StartClient();
     }
