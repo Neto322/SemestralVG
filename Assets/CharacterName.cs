@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CharacterName : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -9,11 +10,14 @@ public class CharacterName : MonoBehaviour
 
 
 
+
     void Start()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera");
 
-        Debug.Log(cam);
+      
+  
+        
     }
 
     // Update is called once per frame
@@ -21,4 +25,8 @@ public class CharacterName : MonoBehaviour
     {
         transform.LookAt(cam.transform.position);
     }
+    
+    
 }
+
+    

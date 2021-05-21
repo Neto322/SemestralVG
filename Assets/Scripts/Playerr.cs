@@ -5,6 +5,8 @@ using MLAPI;
 using MLAPI.Messaging;
 using TMPro;
 using MLAPI.Transports.PhotonRealtime;
+using MLAPI.NetworkVariable;
+using Photon.Realtime;
 public class Playerr : NetworkBehaviour
 {
 
@@ -37,7 +39,13 @@ public class Playerr : NetworkBehaviour
 
    PhotonRealtimeTransport transport;
 
-   public string nombre;
+    public Texture btnTexture;
+   
+    public NetworkVariable<string> nombrenNet = new NetworkVariable<string>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, "Default");
+
+  
+    public string stringToEdit = "Hello World";
+
     void Awake()
     {
         
@@ -64,9 +72,16 @@ public class Playerr : NetworkBehaviour
 
     
     private void Start() {
-        transport = NetworkManager.Singleton.GetComponent<PhotonRealtimeTransport>();
+       
+       if(IsOwner)
+       {
 
-        textMeshPro.text = transport.Client.LocalPlayer.NickName;
+      
+       
+
+       }
+  
+        
     }
 
     // Update is called once per frame
@@ -91,7 +106,7 @@ public class Playerr : NetworkBehaviour
        }
             
             
-        
+       
        
     }
 
@@ -99,22 +114,28 @@ public class Playerr : NetworkBehaviour
     private void LateUpdate() {
        if(IsOwner)
        {
-           if(AxisInput != Vector2.zero)
-                {
-                    anim.SetBool("Move",true);
+                if(AxisInput != Vector2.zero)
+                    {
+                        anim.SetBool("Move",true);
 
-                } 
+                    } 
 
-                if(inputActions.Movement.Action.triggered)
-                {
-                    anim.SetTrigger("Punch");
-                }
+                    if(inputActions.Movement.Action.triggered)
+                    {
+                        anim.SetTrigger("Punch");
+                    }
+                    
+                    BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+
+                    BlendValue = Mathf.Clamp(BlendValue,0,1);
                 
-                BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+                    anim.SetFloat("Blending",BlendValue);
 
-                BlendValue = Mathf.Clamp(BlendValue,0,1);
-            
-                anim.SetFloat("Blending",BlendValue);
+                    
+
+                  
+
+
        }
             
             
@@ -123,6 +144,38 @@ public class Playerr : NetworkBehaviour
             
 
         
+    }
+
+    [ServerRpc]
+    void SetNameServerRpc()
+    {
+        nombrenNet.Value = stringToEdit;
+    }
+
+     void OnGUI()
+    {
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+
+        // draw the name with a shadow (colored for buf)	
+        GUI.color = Color.black;
+        GUI.Label(new Rect(pos.x - 20, Screen.height - pos.y - 30, 100, 30), nombrenNet.Value);
+
+
+        GUI.Label(new Rect(pos.x - 21, Screen.height - pos.y - 31, 100, 30), nombrenNet.Value);
+
+
+         if(IsOwner)
+       {
+        stringToEdit = GUI.TextField(new Rect(pos.x - 45, Screen.height - pos.y - 45, 400, 400), stringToEdit, 25);
+
+    
+
+        if (GUI.Button(new Rect(10, 70, 50, 30), "Click"))
+        {
+            SetNameServerRpc();
+        }
+           
+       }   
     }
 
     

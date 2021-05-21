@@ -5,6 +5,9 @@ using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.Spawning;
 using UnityEngine.UI;
+using TMPro;
+using MLAPI.NetworkVariable;
+
 public class Spawner : NetworkBehaviour
 {
 
@@ -17,6 +20,8 @@ public class Spawner : NetworkBehaviour
 
     [SerializeField]
     InputField inputField;
+
+
 
 
     void Awake()
@@ -52,10 +57,17 @@ public class Spawner : NetworkBehaviour
 
     [ServerRpc]    
     private void SpawnCharacterServerRpc(ulong netID){
+
+        
         Debug.Log("Cliente quiere llamar");
         GameObject go = Instantiate(character);
         
+
         go.GetComponent<NetworkObject>().SpawnWithOwnership(netID);
+
+        
+
+
         ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
 
         SpawnCharacterClientRpc(itemNetID);
@@ -66,10 +78,13 @@ public class Spawner : NetworkBehaviour
     {
         Debug.Log("Client is equipping");
 
-        NetworkObject netObj = NetworkSpawnManager.SpawnedObjects[itemNetID];
-
         
 
+        // NetworkObject netObj = NetworkSpawnManager.SpawnedObjects[itemNetID];
+
+
+
+       
 
 
     }
