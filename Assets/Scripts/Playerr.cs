@@ -7,6 +7,7 @@ using TMPro;
 using MLAPI.Transports.PhotonRealtime;
 using MLAPI.NetworkVariable;
 using Photon.Realtime;
+
 public class Playerr : NetworkBehaviour
 {
 
@@ -41,7 +42,13 @@ public class Playerr : NetworkBehaviour
     public NetworkVariable<string> nombrenNet = new NetworkVariable<string>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, "Default");
 
   
-    
+     public GUIStyle  textfieldStyle;
+
+     public GUIStyle  titlestyle;
+
+    public GUIStyle  nameStyle;
+
+
 
     public string nombre;
 
@@ -52,6 +59,8 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     GameObject[] characters;
 
+     Color colorname;
+
     void Awake()
     {
         
@@ -60,6 +69,7 @@ public class Playerr : NetworkBehaviour
         cam = Camera.main.transform;
 
         
+
         
     }
 
@@ -87,6 +97,7 @@ public class Playerr : NetworkBehaviour
 
             anim = GetComponentInChildren<Animator>();
 
+             colorname = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));
        }
   
         
@@ -170,27 +181,32 @@ public class Playerr : NetworkBehaviour
 
         // draw the name with a shadow (colored for buf)	
 
-        GUIStyle st = new GUIStyle();
+        
 
-        st.alignment = TextAnchor.MiddleCenter;
+        nameStyle.alignment = TextAnchor.MiddleCenter;
+
+
+        nameStyle.normal.textColor = colorname;
 
     
         GUI.color = Color.white;
-        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, st);
+        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, nameStyle);
 
 
-        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, st);
+        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, nameStyle);
 
+        
 
          if(IsOwner)
        {
+            GUI.Label(new Rect(Screen.width * 0.43f , Screen.height * 0.2f , 100 , 30 ),"Set Character Name", titlestyle);
            if(nameset == false)
-        nombrenNet.Value = GUI.TextField(new Rect( 350, 125, 80, 20), nombrenNet.Value, 8);
+        nombrenNet.Value = GUI.TextField(new Rect( Screen.width * 0.44f ,Screen.height * 0.3f , 80, 20), nombrenNet.Value, 8,textfieldStyle);
 
-    
+
         if(nameset == false)
         {
-              if (GUI.Button(new Rect(350, 200, 70, 30), "Set Name"))
+              if (GUI.Button(new Rect(Screen.width * 0.45f,Screen.height * 0.5f, 70, 30), "Set Name"))
                 {
                     nameset = true;
                 }
