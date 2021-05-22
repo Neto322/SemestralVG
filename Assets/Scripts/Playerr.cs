@@ -26,17 +26,14 @@ public class Playerr : NetworkBehaviour
 
     Quaternion targetRotation;
 
-    [SerializeField]
-    Animator anim;
+    public Animator anim;
 
     [SerializeField]
    float maxSpeed;
 
    float BlendValue;
 
-   [SerializeField]
-   TextMeshPro textMeshPro;
-
+ 
    PhotonRealtimeTransport transport;
 
     public Texture btnTexture;
@@ -44,7 +41,16 @@ public class Playerr : NetworkBehaviour
     public NetworkVariable<string> nombrenNet = new NetworkVariable<string>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, "Default");
 
   
-    public string stringToEdit = "Hello World";
+    
+
+    public string nombre;
+
+    bool nameset = false;
+
+    public int characterID;
+
+    [SerializeField]
+    GameObject[] characters;
 
     void Awake()
     {
@@ -76,8 +82,10 @@ public class Playerr : NetworkBehaviour
        if(IsOwner)
        {
 
-      
        
+            characters[characterID].SetActive(true);
+
+            anim = GetComponentInChildren<Animator>();
 
        }
   
@@ -103,6 +111,8 @@ public class Playerr : NetworkBehaviour
 
 
             rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
+
+            
        }
             
             
@@ -147,36 +157,49 @@ public class Playerr : NetworkBehaviour
     }
 
     [ServerRpc]
-    void SetNameServerRpc()
+    void SetCharacterServerRpc()
     {
-        nombrenNet.Value = stringToEdit;
+
     }
+
+   
 
      void OnGUI()
     {
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
 
         // draw the name with a shadow (colored for buf)	
-        GUI.color = Color.black;
-        GUI.Label(new Rect(pos.x - 20, Screen.height - pos.y - 30, 100, 30), nombrenNet.Value);
+
+        GUIStyle st = new GUIStyle();
+
+        st.alignment = TextAnchor.MiddleCenter;
+
+    
+        GUI.color = Color.white;
+        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, st);
 
 
-        GUI.Label(new Rect(pos.x - 21, Screen.height - pos.y - 31, 100, 30), nombrenNet.Value);
+        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, st);
 
 
          if(IsOwner)
        {
-        stringToEdit = GUI.TextField(new Rect(pos.x - 45, Screen.height - pos.y - 45, 400, 400), stringToEdit, 25);
+           if(nameset == false)
+        nombrenNet.Value = GUI.TextField(new Rect( 350, 125, 80, 20), nombrenNet.Value, 8);
 
     
-
-        if (GUI.Button(new Rect(10, 70, 50, 30), "Click"))
+        if(nameset == false)
         {
-            SetNameServerRpc();
+              if (GUI.Button(new Rect(350, 200, 70, 30), "Set Name"))
+                {
+                    nameset = true;
+                }
         }
+      
+       }
            
        }   
-    }
+    
 
     
     Vector2 AxisInput => inputActions.Movement.Axis.ReadValue<Vector2>();

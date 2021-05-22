@@ -18,8 +18,7 @@ public class Spawner : NetworkBehaviour
 
     InputActions inputActions;
 
-    [SerializeField]
-    InputField inputField;
+
 
 
 
@@ -42,6 +41,8 @@ public class Spawner : NetworkBehaviour
             this.gameObject.SetActive(false);
         }
     }
+
+
     private void OnEnable() {
       
        inputActions.Enable();
@@ -49,11 +50,15 @@ public class Spawner : NetworkBehaviour
         
     }
 
+
+
     private void OnDisable() {
       
        inputActions.Disable();
        
     }
+
+
 
     [ServerRpc]    
     private void SpawnCharacterServerRpc(ulong netID){
@@ -67,19 +72,20 @@ public class Spawner : NetworkBehaviour
 
         
 
-
         ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
 
         SpawnCharacterClientRpc(itemNetID);
 
     }
+
+
     [ClientRpc]
     private void SpawnCharacterClientRpc(ulong itemNetID)
     {
         Debug.Log("Client is equipping");
 
         
-
+        Destroy(this.gameObject);
         // NetworkObject netObj = NetworkSpawnManager.SpawnedObjects[itemNetID];
 
 
@@ -89,18 +95,11 @@ public class Spawner : NetworkBehaviour
 
     }
 
-    private void Update() {
-        if(inputActions.Movement.Action.triggered)
-        {
-            Debug.Log("Lets go");
-            if(IsLocalPlayer)
-            {
-                Debug.Log("Lets gogggggg");
-                SpawnCharacterServerRpc(NetworkManager.Singleton.LocalClientId);
-            }
-        }
 
-    }
+
+ 
+
+
     public void StartGame(){
         Debug.Log("Lets go");
         if(IsLocalPlayer)

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4900894478930328799}
   - component: {fileID: 3139346222092402681}
   m_Layer: 0
-  m_Name: Capsule 1
+  m_Name: Personaje 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,6 +53,11 @@ MonoBehaviour:
   speed: 50
   anim: {fileID: 1451735894148168422}
   maxSpeed: 5
+  textMeshPro: {fileID: 0}
+  btnTexture: {fileID: 0}
+  nombrenNet:
+    m_InternalValue: Default
+  nombre: 
 --- !u!136 &5134190077016055226
 CapsuleCollider:
   m_ObjectHideFlags: 0
