@@ -37,10 +37,10 @@ public class Playerr : NetworkBehaviour
 
    float BlendValue;
 
- 
-   PhotonRealtimeTransport transport;
+   int LocalID;
 
-    public Texture btnTexture;
+ 
+
    
     public NetworkVariable<string> nombrenNet = new NetworkVariable<string>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, "Default");
 
@@ -49,21 +49,18 @@ public class Playerr : NetworkBehaviour
 
      public GUIStyle  titlestyle;
 
-    public GUIStyle  nameStyle;
 
 
 
-    public string nombre;
 
     bool nameset = false;
 
-    public NetworkVariable<int> characterID = new NetworkVariable<int>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, 0);
+    public NetworkVariable<int> characterID = new NetworkVariable<int>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, 100);
 
 
     [SerializeField]
     GameObject[] characters;
 
-     Color colorname;
 
 
 
@@ -74,6 +71,16 @@ public class Playerr : NetworkBehaviour
 
         [SerializeField]
         TextMeshPro text;
+
+    Transform target;
+
+    Vector3 targetDirection;
+
+    float step;
+
+    Vector3 newDirection;
+
+    
 
 
     void Awake()
@@ -96,42 +103,12 @@ public class Playerr : NetworkBehaviour
         inputActions.Disable();
     }
 
-    
     private void Start() {
-       
-       if(IsLocalPlayer)
-       {
-            //characters[characterID.Value].SetActive(true);
-
-            //SetCharacterServerRpc();
-           
-            text.text = nombrenNet.Value;
-
-            anim = GetComponentInChildren<Animator>();
-
-            
-
-            Debug.Log(anim);
-
-            Debug.Log(anim);
-
-
-
-            
-
-
-             colorname = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));
-
-
-
-            if(anim == null)
-            {
-                Debug.Log("Nada xd");
-            }
-       }
-  
-        
+        SetNameServerRpc();
+    
     }
+    
+  
 
     // Update is called once per frame
     void Update()
@@ -139,25 +116,25 @@ public class Playerr : NetworkBehaviour
        if(IsLocalPlayer)
        {
            
-
-
-
-            text.text = nombrenNet.Value;
+            SetNameServerRpc();
 
      
+
+            
+
 
             switch(states)
             {
                 case Estados.Idle:
+              
 
-
+                
                 break;
 
                     case Estados.Playing:
 
                     if(AxisInput != Vector2.zero)
                                 {
-                                    Debug.Log("AAAAAAAAAAAAAAAAAA");
                                     angle = Mathf.Atan2(AxisInput.x,AxisInput.y);
                                     angle = Mathf.Rad2Deg * angle;
                                     angle += cam.eulerAngles.y;
@@ -192,26 +169,26 @@ public class Playerr : NetworkBehaviour
        {
 
                
-          
-                 if(AxisInput != Vector2.zero)
-                    {
-                        anim.SetBool("Move",true);
+           if(anim)
+           {
+               if(AxisInput != Vector2.zero)
+                {
+                    anim.SetBool("Move",true);
 
-                    } 
+                } 
 
-                    if(inputActions.Movement.Action.triggered)
-                    {
-                        anim.SetTrigger("Punch");
-                    }
+                if(inputActions.Movement.Action.triggered)
+                {
+                    anim.SetTrigger("Punch");
+                }
                     
-                    BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+                BlendValue = rigidbody.velocity.magnitude / maxSpeed;
 
-                    BlendValue = Mathf.Clamp(BlendValue,0,1);
+                BlendValue = Mathf.Clamp(BlendValue,0,1);
                 
-                    anim.SetFloat("Blending",BlendValue);
-            
-
-            
+                anim.SetFloat("Blending",BlendValue);
+           }              
+                 
 
        }
             
@@ -224,7 +201,91 @@ public class Playerr : NetworkBehaviour
     }
 
   
+    [ServerRpc]
+    void SetNameServerRpc()
+    {
+        
+        
+            SetNameClientRpc();
 
+        
+    }
+
+
+    [ClientRpc]
+    void SetNameClientRpc()
+    {    
+           
+            Debug.Log("Madre MIa");
+            text.text = nombrenNet.Value;
+
+            text.transform.LookAt(cam.position,Vector3.up);
+
+            text.transform.eulerAngles = new Vector3(45,180,0);
+
+         
+            if(nameset == false)
+            {
+                Debug.Log("AAAA");
+            }
+            else{
+                Debug.Log("oooo");
+            }
+             
+
+            
+
+
+     
+
+
+
+        
+
+        
+         
+     
+
+    }
+
+
+    [ServerRpc]
+    void CleanNamesServerRpc(int LocalID,ulong netID)
+    {
+      
+        CleanNamesClientRpc(LocalID);
+    }
+
+   [ClientRpc]
+    void CleanNamesClientRpc(int LocalID)
+    {
+        Debug.Log("Papito");
+        characterID.Value = LocalID;
+
+          for(int i = 0; i < characters.Length; i++)
+            {
+                if(characters[i].GetComponent<Animator>() != anim)
+                {
+                    Debug.Log("Este no es el bueno");
+                    characters[i].SetActive(false);
+                }
+                else
+                {
+                    Debug.Log("Este si >:) que es " + characters[characterID.Value].name);
+                }
+            }
+
+        
+        characters[characterID.Value].SetActive(true);
+        anim = GetComponentInChildren<Animator>();
+
+
+
+
+    }
+
+   
+  
   
      void OnGUI()
     {
@@ -234,17 +295,9 @@ public class Playerr : NetworkBehaviour
 
         
 
-        nameStyle.alignment = TextAnchor.MiddleCenter;
-
-
-        nameStyle.normal.textColor = colorname;
 
     
-        GUI.color = Color.white;
-        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, nameStyle);
-
-
-        GUI.Label(new Rect(pos.x -50, Screen.height - pos.y - 35, 100, 30), nombrenNet.Value, nameStyle);
+  
 
         
 
@@ -259,48 +312,48 @@ public class Playerr : NetworkBehaviour
         if(nameset == false)
         {
                if (GUI.Button(new Rect(Screen.width * 0.3f,Screen.height * 0.5f, 90, 30), "<"))
-                {  /* 
-                    if(characterID.Value == 0)
+                {  
+                  if(LocalID == 0)
                     {
-                        characters[characterID.Value].SetActive(false);
-                        characterID.Value = 7;
-                        characters[characterID.Value].SetActive(true);
+                        characters[LocalID].SetActive(false);
+                        LocalID = 7;
+                        characters[LocalID].SetActive(true);
                     }
                     else
                     {
-                        characters[characterID.Value].SetActive(false);
-                        characterID.Value--;
-                        characters[characterID.Value].SetActive(true);
+                        characters[LocalID].SetActive(false);
+                        LocalID--;
+                        characters[LocalID].SetActive(true);
 
                     }
                     
-                    anim = GetComponentInChildren<Animator>();
+                    anim = GetComponentInChildren<Animator>();;
 
-*/
+
 
                 }
 
                  if (GUI.Button(new Rect(Screen.width * 0.6f,Screen.height * 0.5f, 90, 30), ">"))
                 {
-                    /*
-                    if(characterID.Value == 7)
+                    if(LocalID == 7)
                     {
-                        characters[characterID.Value].SetActive(false);
-                        characterID.Value = 0;
-                        characters[characterID.Value].SetActive(true);
+                        characters[LocalID].SetActive(false);
+                        LocalID = 0;
+                        characters[LocalID].SetActive(true);
                     }
                     else
                     {
-                        characters[characterID.Value].SetActive(false);
-                        characterID.Value++;
-                        characters[characterID.Value].SetActive(true);
+                        characters[LocalID].SetActive(false);
+         
+                        LocalID++;
+                        characters[LocalID].SetActive(true);
 
                     }
 
-                    anim = GetComponentInChildren<Animator>();
+                   
 
 
-*/
+
 
                 }
 
@@ -308,7 +361,15 @@ public class Playerr : NetworkBehaviour
                 {
                     states = Estados.Playing;
                     nameset = true;
-                    //SetCharacterServerRpc();
+                    for(int i = 0; i < characters.Length; i++)
+                    {
+                        characters[i].SetActive(false);
+                    }
+                     
+
+                    characters[LocalID].SetActive(true);
+                    anim = GetComponentInChildren<Animator>();
+                    CleanNamesServerRpc(LocalID,NetworkManager.Singleton.LocalClientId);
 
                 }
         }
