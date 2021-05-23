@@ -37,7 +37,7 @@ public class Playerr : NetworkBehaviour
 
    float BlendValue;
 
-   int LocalID;
+   int LocalID = 0;
 
  
 
@@ -69,16 +69,12 @@ public class Playerr : NetworkBehaviour
         Estados states = Estados.Idle;
 
 
-        [SerializeField]
-        TextMeshPro text;
+    [SerializeField]
+    TextMeshPro text;
 
-    Transform target;
 
-    Vector3 targetDirection;
 
-    float step;
 
-    Vector3 newDirection;
 
     
 
@@ -97,6 +93,8 @@ public class Playerr : NetworkBehaviour
 
     private void OnEnable() {
         inputActions.Enable();
+      
+            
      }
 
     private void OnDisable() {
@@ -104,19 +102,28 @@ public class Playerr : NetworkBehaviour
     }
 
     private void Start() {
-        SetNameServerRpc();
+
+        
     
     }
     
   
-
     // Update is called once per frame
     void Update()
     {
        if(IsLocalPlayer)
        {
            
-            SetNameServerRpc();
+           if(nameset == true)
+           {
+               Debug.Log("Activo");
+                SetNameServerRpc();
+
+           }
+           else
+           {
+                Debug.Log("Inactivo");
+           }
 
      
 
@@ -167,27 +174,44 @@ public class Playerr : NetworkBehaviour
     private void LateUpdate() {
        if(IsLocalPlayer)
        {
+           
+
+            switch(states)
+            {
+                case Estados.Idle:
+              
+
+                
+                break;
+
+                    case Estados.Playing:
+
+                       if(anim)
+                            {
+                                if(AxisInput != Vector2.zero)
+                                    {
+                                        anim.SetBool("Move",true);
+
+                                    } 
+
+                                    if(inputActions.Movement.Action.triggered)
+                                    {
+                                        anim.SetTrigger("Punch");
+                                    }
+                                        
+                                    BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+
+                                    BlendValue = Mathf.Clamp(BlendValue,0,1);
+                                    
+                                    anim.SetFloat("Blending",BlendValue);
+                            }   
+                                                    
+
+                break;
+            }
 
                
-           if(anim)
-           {
-               if(AxisInput != Vector2.zero)
-                {
-                    anim.SetBool("Move",true);
-
-                } 
-
-                if(inputActions.Movement.Action.triggered)
-                {
-                    anim.SetTrigger("Punch");
-                }
-                    
-                BlendValue = rigidbody.velocity.magnitude / maxSpeed;
-
-                BlendValue = Mathf.Clamp(BlendValue,0,1);
-                
-                anim.SetFloat("Blending",BlendValue);
-           }              
+                  
                  
 
        }
@@ -199,6 +223,8 @@ public class Playerr : NetworkBehaviour
 
         
     }
+
+
 
   
     [ServerRpc]
@@ -216,21 +242,20 @@ public class Playerr : NetworkBehaviour
     void SetNameClientRpc()
     {    
            
-            Debug.Log("Madre MIa");
+        
             text.text = nombrenNet.Value;
 
             text.transform.LookAt(cam.position,Vector3.up);
 
             text.transform.eulerAngles = new Vector3(45,180,0);
 
-         
-            if(nameset == false)
-            {
-                Debug.Log("AAAA");
-            }
-            else{
-                Debug.Log("oooo");
-            }
+          
+                 
+            characters[characterID.Value].SetActive(true);
+
+            
+          
+            
              
 
             
@@ -247,6 +272,7 @@ public class Playerr : NetworkBehaviour
      
 
     }
+    
 
 
     [ServerRpc]
@@ -284,6 +310,8 @@ public class Playerr : NetworkBehaviour
 
     }
 
+
+
    
   
   
@@ -311,19 +339,26 @@ public class Playerr : NetworkBehaviour
 
         if(nameset == false)
         {
+                characters[LocalID].SetActive(true);
                if (GUI.Button(new Rect(Screen.width * 0.3f,Screen.height * 0.5f, 90, 30), "<"))
                 {  
                   if(LocalID == 0)
                     {
                         characters[LocalID].SetActive(false);
                         LocalID = 7;
+                        characterID.Value = LocalID;
                         characters[LocalID].SetActive(true);
+
+
                     }
                     else
                     {
                         characters[LocalID].SetActive(false);
                         LocalID--;
+                        characterID.Value = LocalID;
                         characters[LocalID].SetActive(true);
+
+
 
                     }
                     
@@ -339,14 +374,19 @@ public class Playerr : NetworkBehaviour
                     {
                         characters[LocalID].SetActive(false);
                         LocalID = 0;
+                        characterID.Value = LocalID;
                         characters[LocalID].SetActive(true);
+
+
                     }
                     else
                     {
                         characters[LocalID].SetActive(false);
-         
                         LocalID++;
+                        characterID.Value = LocalID;
                         characters[LocalID].SetActive(true);
+
+
 
                     }
 
@@ -365,9 +405,7 @@ public class Playerr : NetworkBehaviour
                     {
                         characters[i].SetActive(false);
                     }
-                     
 
-                    characters[LocalID].SetActive(true);
                     anim = GetComponentInChildren<Animator>();
                     CleanNamesServerRpc(LocalID,NetworkManager.Singleton.LocalClientId);
 
