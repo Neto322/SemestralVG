@@ -29,6 +29,9 @@ public class CharacterSelect : NetworkBehaviour
     {
         GameObject go = Instantiate(character);
         go.GetComponent<NetworkObject>().SpawnWithOwnership(netID);
+
+        
+        
         ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
 
         SelectCharacterClientRpc(itemNetID);
@@ -40,7 +43,7 @@ public class CharacterSelect : NetworkBehaviour
         NetworkObject netObj = NetworkSpawnManager.SpawnedObjects[itemNetID];
 
         _character = netObj.gameObject;
-        _character.transform.position = new Vector3(0,6,0);
+        
        
 
     }

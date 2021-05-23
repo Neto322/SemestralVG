@@ -22,7 +22,7 @@ public class ConnectionManager : MonoBehaviour
       
 
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-        NetworkManager.Singleton.StartHost(RandomPosition(),Quaternion.identity);
+        NetworkManager.Singleton.StartHost(new Vector3(0,5,0),Quaternion.identity);
 
         
     }
@@ -30,7 +30,7 @@ public class ConnectionManager : MonoBehaviour
     private void ApprovalCheck(byte[] connectionData, ulong clientID, NetworkManager.ConnectionApprovedDelegate callback)
     {
         bool approve = System.Text.Encoding.ASCII.GetString(connectionData) == "Password1234";
-        callback(true,null,approve,  RandomPosition() ,Quaternion.identity);
+        callback(true,null,approve,  new Vector3(0,5,0),Quaternion.identity);
     }
 
     public void Join()
@@ -50,13 +50,5 @@ public class ConnectionManager : MonoBehaviour
         
     }
 
-    Vector3 RandomPosition()
-    {
-
-        float X = Random.Range(-5.0f, 5.0f);
-        float Y = 3;
-
-        return new Vector3(X,Y,0);
-
-    }
+  
 }

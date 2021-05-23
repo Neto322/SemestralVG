@@ -7,7 +7,7 @@ using MLAPI.Spawning;
 using UnityEngine.UI;
 using TMPro;
 using MLAPI.NetworkVariable;
-
+using UnityEngine.UI;
 public class Spawner : NetworkBehaviour
 {
 
@@ -18,27 +18,35 @@ public class Spawner : NetworkBehaviour
 
     InputActions inputActions;
 
+    [SerializeField]
+    Sprite[] monos;
 
+    [SerializeField]
+    Image imagen;
 
-
-
+    int i = 0;
 
     void Awake()
-    {
-        
+    {        
+
         inputActions = new InputActions();
-  
-      
+
     }
 
     private void Start() {
+
+        imagen.sprite = monos[i];
         if(IsLocalPlayer)
         {
+
             this.gameObject.SetActive(true);
+
         }
         else
         {
+
             this.gameObject.SetActive(false);
+
         }
     }
 
@@ -68,10 +76,11 @@ public class Spawner : NetworkBehaviour
         GameObject go = Instantiate(character);
         
 
-        go.GetComponent<NetworkObject>().SpawnWithOwnership(netID);
+        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(netID);
 
-        
-
+        Debug.Log("Spawner " + i);
+      
+        Debug.Log("ID de mono " + go.GetComponent<Playerr>().characterID.Value );
         ulong itemNetID = go.GetComponent<NetworkObject>().NetworkObjectId;
 
         SpawnCharacterClientRpc(itemNetID);
@@ -96,8 +105,8 @@ public class Spawner : NetworkBehaviour
     }
 
 
-
- 
+       
+   
 
 
     public void StartGame(){
@@ -109,4 +118,39 @@ public class Spawner : NetworkBehaviour
         }
     }
     
+    public void Right()
+    {
+        if(i == 7)
+        {
+            i = 0;
+            
+            imagen.sprite = monos[i];
+
+            return;
+        }
+        else
+        {
+            i++;
+
+            imagen.sprite = monos[i];
+
+        }
+    }
+
+      public void Left()
+    {
+        if(i == 0)
+        {
+            i = 7;
+            imagen.sprite = monos[i];
+            return;
+        }
+        else
+        {
+            i--;
+
+            imagen.sprite = monos[i];
+            
+        }
+    }
 }
