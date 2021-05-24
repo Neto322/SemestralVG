@@ -27,12 +27,20 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Action"",
+                    ""name"": ""ActionStart"",
                     ""type"": ""Button"",
-                    ""id"": ""17caa27a-ba5a-41cd-9112-a603c790c155"",
+                    ""id"": ""2d560084-af7a-4710-8af8-037cfef2222c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""ActionEnd"",
+                    ""type"": ""Button"",
+                    ""id"": ""0138cc57-54a4-46ef-9d9b-1396ca6ecb5e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)""
                 }
             ],
             ""bindings"": [
@@ -148,23 +156,23 @@ public class @InputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6620a459-b82b-4b1a-ae55-384bf39a1f53"",
+                    ""id"": ""1a0c6dbf-8f57-4677-8c10-791e0f7e88ad"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Action"",
+                    ""action"": ""ActionStart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9b9f740b-62ac-47f0-a58e-7569c5f8c0b6"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""id"": ""c3f89227-a303-42ce-aa95-3a2868e77e64"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Action"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ActionEnd"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -199,7 +207,8 @@ public class @InputActions : IInputActionCollection, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Axis = m_Movement.FindAction("Axis", throwIfNotFound: true);
-        m_Movement_Action = m_Movement.FindAction("Action", throwIfNotFound: true);
+        m_Movement_ActionStart = m_Movement.FindAction("ActionStart", throwIfNotFound: true);
+        m_Movement_ActionEnd = m_Movement.FindAction("ActionEnd", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -250,13 +259,15 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Movement;
     private IMovementActions m_MovementActionsCallbackInterface;
     private readonly InputAction m_Movement_Axis;
-    private readonly InputAction m_Movement_Action;
+    private readonly InputAction m_Movement_ActionStart;
+    private readonly InputAction m_Movement_ActionEnd;
     public struct MovementActions
     {
         private @InputActions m_Wrapper;
         public MovementActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Axis => m_Wrapper.m_Movement_Axis;
-        public InputAction @Action => m_Wrapper.m_Movement_Action;
+        public InputAction @ActionStart => m_Wrapper.m_Movement_ActionStart;
+        public InputAction @ActionEnd => m_Wrapper.m_Movement_ActionEnd;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -269,9 +280,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Axis.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnAxis;
                 @Axis.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnAxis;
                 @Axis.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnAxis;
-                @Action.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnAction;
-                @Action.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnAction;
-                @Action.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnAction;
+                @ActionStart.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionStart;
+                @ActionStart.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionStart;
+                @ActionStart.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionStart;
+                @ActionEnd.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionEnd;
+                @ActionEnd.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionEnd;
+                @ActionEnd.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionEnd;
             }
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -279,9 +293,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Axis.started += instance.OnAxis;
                 @Axis.performed += instance.OnAxis;
                 @Axis.canceled += instance.OnAxis;
-                @Action.started += instance.OnAction;
-                @Action.performed += instance.OnAction;
-                @Action.canceled += instance.OnAction;
+                @ActionStart.started += instance.OnActionStart;
+                @ActionStart.performed += instance.OnActionStart;
+                @ActionStart.canceled += instance.OnActionStart;
+                @ActionEnd.started += instance.OnActionEnd;
+                @ActionEnd.performed += instance.OnActionEnd;
+                @ActionEnd.canceled += instance.OnActionEnd;
             }
         }
     }
@@ -307,6 +324,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     public interface IMovementActions
     {
         void OnAxis(InputAction.CallbackContext context);
-        void OnAction(InputAction.CallbackContext context);
+        void OnActionStart(InputAction.CallbackContext context);
+        void OnActionEnd(InputAction.CallbackContext context);
     }
 }

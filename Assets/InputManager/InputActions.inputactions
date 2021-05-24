@@ -14,12 +14,20 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Action",
+                    "name": "ActionStart",
                     "type": "Button",
-                    "id": "17caa27a-ba5a-41cd-9112-a603c790c155",
+                    "id": "2d560084-af7a-4710-8af8-037cfef2222c",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press"
+                },
+                {
+                    "name": "ActionEnd",
+                    "type": "Button",
+                    "id": "0138cc57-54a4-46ef-9d9b-1396ca6ecb5e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=1)"
                 }
             ],
             "bindings": [
@@ -135,23 +143,23 @@
                 },
                 {
                     "name": "",
-                    "id": "6620a459-b82b-4b1a-ae55-384bf39a1f53",
+                    "id": "1a0c6dbf-8f57-4677-8c10-791e0f7e88ad",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Action",
+                    "action": "ActionStart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "9b9f740b-62ac-47f0-a58e-7569c5f8c0b6",
-                    "path": "<Gamepad>/buttonSouth",
+                    "id": "c3f89227-a303-42ce-aa95-3a2868e77e64",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Joystick",
-                    "action": "Action",
+                    "groups": "Keyboard",
+                    "action": "ActionEnd",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
