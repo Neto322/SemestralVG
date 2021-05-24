@@ -86,8 +86,12 @@ public class Playerr : NetworkBehaviour
 
     [SerializeField]
     Transform punchposition;
+
     
- 
+    
+    float punchrate = 1;
+
+    float netxtpunch = 0;
 
     void Awake()
     {
@@ -165,10 +169,13 @@ public class Playerr : NetworkBehaviour
                                 rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
 
                                 //transform.position += transform.forward * (15 * MovementAxis.magnitude) * Time.deltaTime;
-                    
 
-                                if(inputActions.Movement.Action.triggered)
+                           
+                                if(inputActions.Movement.Action.triggered && Time.time > netxtpunch)
                                 {
+                                    anim.SetTrigger("Punch");
+                                    netxtpunch = Time.time + punchrate;
+                                    rigidbody.AddForce(transform.forward * 5500 * Time.deltaTime,ForceMode.Impulse);
                                     AttackPlayerServerRpc();
                                 }
                                 
@@ -215,10 +222,7 @@ public class Playerr : NetworkBehaviour
 
                                     } 
 
-                                    if(inputActions.Movement.Action.triggered)
-                                    {
-                                        anim.SetTrigger("Punch");
-                                    }
+                                   
                                         
                                     BlendValue = rigidbody.velocity.magnitude / maxSpeed;
 
