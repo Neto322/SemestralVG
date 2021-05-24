@@ -26,8 +26,7 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     float speed;
 
-    
-    Transform cam;
+    Camera cam;
 
 
     Quaternion targetRotation;
@@ -63,9 +62,7 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     GameObject[] characters;
 
-    [SerializeField]
-    Camera playercam;
-
+ 
 
      enum Estados {Idle,Playing,Death}
 
@@ -97,7 +94,7 @@ public class Playerr : NetworkBehaviour
         
         inputActions = new InputActions();
         rigidbody = GetComponent<Rigidbody>();
-        cam = Camera.main.transform;
+        
 
 
 
@@ -115,6 +112,8 @@ public class Playerr : NetworkBehaviour
     }
 
     private void Start() {
+        
+        cam = gameObject.GetComponentInChildren<Camera>();
 
 
 
@@ -124,6 +123,10 @@ public class Playerr : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!IsLocalPlayer)
+        {
+            cam.gameObject.SetActive(false);
+        }
        if(IsLocalPlayer)
        {
            
@@ -154,7 +157,7 @@ public class Playerr : NetworkBehaviour
                                 {
                                     angle = Mathf.Atan2(AxisInput.x,AxisInput.y);
                                     angle = Mathf.Rad2Deg * angle;
-                                    angle += cam.eulerAngles.y;
+                                    angle += cam.transform.eulerAngles.y;
                                     targetRotation = Quaternion.Euler(0,angle,0);
                                     transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
                                 }
@@ -166,7 +169,7 @@ public class Playerr : NetworkBehaviour
 
                                 if(inputActions.Movement.Action.triggered)
                                 {
-                                    Attack();
+                                    AttackPlayerServerRpc();
                                 }
                                 
 
@@ -187,19 +190,7 @@ public class Playerr : NetworkBehaviour
   
 
 
-    void  Attack()
-    {
-
-        enemiesHit = Physics.OverlapSphere(punchposition.position,range,playerlayer);
-
-        foreach(Collider enemy in enemiesHit)
-        {
-            AttackPlayerServerRpc(enemy.gameObject);
-        }
-
-
-    }
-
+   
  
     private void LateUpdate() {
        if(IsLocalPlayer)
@@ -261,19 +252,59 @@ public class Playerr : NetworkBehaviour
     }
 
     [ServerRpc]
-    void AttackPlayerServerRpc(GameObject enemy)
+    void AttackPlayerServerRpc()
     {
         
-        AttackPlayerClientRpc(enemy);
+        AttackPlayerClientRpc();
     }
 
     
     
     [ClientRpc]
-    void AttackPlayerClientRpc(GameObject enemy)
+    void AttackPlayerClientRpc()
     {
-        Debug.Log("Pum te pego" + enemy.name);
+        foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
+        {
+          
+           
+            
+            enemiesHit = Physics.OverlapSphere(punchposition.position,range,playerlayer);
+              
+            
+           foreach(Collider col in enemiesHit)
+           {    
+               if(obj.PlayerObject.GetComponent<NetworkObject>().NetworkObjectId == col.GetComponent<NetworkObject>().NetworkObjectId)
+                {
+                    Debug.Log("Si pega" + obj.PlayerObject.name);
+                    GameObject gameObj = obj.PlayerObject.gameObject;
+                    Vector3 direction = gameObj.transform.position -  transform.position;
+
+                    gameObj.GetComponent<Playerr>().KnockbackServerRpc(direction);
+
+
+                }
+           }
+    
+        }
     }
+
+
+   [ServerRpc(RequireOwnership = false)]
+   public void KnockbackServerRpc(Vector3 direction)
+   {
+        KnockbackClientRpc(direction);
+   }
+
+
+
+    [ClientRpc]
+
+   public  void KnockbackClientRpc(Vector3 direction)
+   {
+        rigidbody.AddForce(direction.normalized * 2500 * Time.deltaTime,ForceMode.Impulse);
+
+   }
+
 
     [ServerRpc]
     void SetNameServerRpc()
@@ -293,7 +324,7 @@ public class Playerr : NetworkBehaviour
         
             text.text = nombrenNet.Value;
 
-            text.transform.LookAt(cam.position,Vector3.up);
+            text.transform.LookAt(cam.transform.position,Vector3.up);
 
             text.transform.eulerAngles = new Vector3(45,180,0);
 
@@ -365,7 +396,6 @@ public class Playerr : NetworkBehaviour
   
      void OnGUI()
     {
-        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
 
         // draw the name with a shadow (colored for buf)	
 
@@ -386,7 +416,7 @@ public class Playerr : NetworkBehaviour
 
 
            if(nameset == false)
-        nombrenNet.Value = GUI.TextField(new Rect( Screen.width * 0.43f ,Screen.height * 0.6f , 400, 160), nombrenNet.Value, 8,textfieldStyle);
+        nombrenNet.Value = GUI.TextField(new Rect( Screen.width * 0.43f ,Screen.height * 0.6f , 400, 100), nombrenNet.Value, 8,textfieldStyle);
 
 
         if(nameset == false)
@@ -451,13 +481,15 @@ public class Playerr : NetworkBehaviour
 
               if (GUI.Button(new Rect(Screen.width * 0.5f,Screen.height * 0.8f, 180, 60), "Start Game"))
                 {
+                    cam.transform.SetParent(null);
+                    cam.transform.position = new Vector3(0,52,62);
+                    cam.transform.eulerAngles = new Vector3(45,180,0);
                     states = Estados.Playing;
                     nameset = true;
                     for(int i = 0; i < characters.Length; i++)
                     {
                         characters[i].SetActive(false);
                     }
-                    playercam.gameObject.SetActive(false);
                     anim = GetComponentInChildren<Animator>();
                     CleanNamesServerRpc(LocalID,NetworkManager.Singleton.LocalClientId);
 
