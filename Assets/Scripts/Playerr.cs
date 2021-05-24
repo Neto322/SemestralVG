@@ -76,11 +76,16 @@ public class Playerr : NetworkBehaviour
     TextMeshPro text;
 
 
+    Collider[] enemiesHit;
+
+    [SerializeField]
+    LayerMask playerlayer;
 
 
-
+    [SerializeField]
+    float range;
     
-
+ 
 
     void Awake()
     {
@@ -150,14 +155,14 @@ public class Playerr : NetworkBehaviour
                                     transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
                                 }
                                 
-                                //rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
+                                rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
 
-
-                                
+                                //transform.position += transform.forward * (15 * MovementAxis.magnitude) * Time.deltaTime;
+                    
 
                                 if(inputActions.Movement.Action.triggered)
                                 {
-                                    rigidbody.velocity = new Vector3(0,10,0);
+                                    Attack();
                                 }
                                 
 
@@ -175,16 +180,18 @@ public class Playerr : NetworkBehaviour
        
     }
 
-    private void FixedUpdate() {
-        rigidbody.velocity = transform.forward * (speed * MovementAxis.magnitude) * Time.fixedDeltaTime;
-
-         
-    }
+  
 
 
-    void Jump()
+    void  Attack()
     {
 
+        enemiesHit = Physics.OverlapSphere(transform.position,range,playerlayer);
+
+        foreach(Collider enemy in enemiesHit)
+        {
+            
+        }
 
 
     }
@@ -241,6 +248,12 @@ public class Playerr : NetworkBehaviour
             
 
         
+    }
+
+
+
+    private void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(transform.position,range);
     }
 
 
