@@ -78,6 +78,7 @@ public class Spawner : NetworkBehaviour
 
         go.GetComponent<NetworkObject>().SpawnAsPlayerObject(netID);
 
+        
         Debug.Log("Spawner " + i);
       
         Debug.Log("ID de mono " + go.GetComponent<Playerr>().characterID.Value );

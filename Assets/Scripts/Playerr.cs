@@ -84,6 +84,11 @@ public class Playerr : NetworkBehaviour
 
     [SerializeField]
     float range;
+
+    
+
+    [SerializeField]
+    Transform punchposition;
     
  
 
@@ -124,13 +129,12 @@ public class Playerr : NetworkBehaviour
            
            if(nameset == true)
            {
-               Debug.Log("Activo");
                 SetNameServerRpc();
 
            }
            else
            {
-                Debug.Log("Inactivo");
+
            }
 
      
@@ -186,11 +190,11 @@ public class Playerr : NetworkBehaviour
     void  Attack()
     {
 
-        enemiesHit = Physics.OverlapSphere(transform.position,range,playerlayer);
+        enemiesHit = Physics.OverlapSphere(punchposition.position,range,playerlayer);
 
         foreach(Collider enemy in enemiesHit)
         {
-            
+            AttackPlayerServerRpc(enemy.gameObject);
         }
 
 
@@ -253,12 +257,24 @@ public class Playerr : NetworkBehaviour
 
 
     private void OnDrawGizmos() {
-        Gizmos.DrawWireSphere(transform.position,range);
+        Gizmos.DrawWireSphere(punchposition.position,range);
     }
 
+    [ServerRpc]
+    void AttackPlayerServerRpc(GameObject enemy)
+    {
+        
+        AttackPlayerClientRpc(enemy);
+    }
 
+    
+    
+    [ClientRpc]
+    void AttackPlayerClientRpc(GameObject enemy)
+    {
+        Debug.Log("Pum te pego" + enemy.name);
+    }
 
-  
     [ServerRpc]
     void SetNameServerRpc()
     {
