@@ -106,8 +106,8 @@ public class Playerr : NetworkBehaviour
 
     private void Start() {
 
-        
-    
+
+
     }
     
   
@@ -131,8 +131,6 @@ public class Playerr : NetworkBehaviour
      
 
             
-
-
             switch(states)
             {
                 case Estados.Idle:
@@ -152,13 +150,21 @@ public class Playerr : NetworkBehaviour
                                     transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
                                 }
                                 
-                                rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
+                                //rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
 
-                                rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
+
+                                
+
+                                if(inputActions.Movement.Action.triggered)
+                                {
+                                    rigidbody.velocity = new Vector3(0,10,0);
+                                }
                                 
 
                 break;
-            }
+            }    
+
+      
 
 
 
@@ -169,8 +175,19 @@ public class Playerr : NetworkBehaviour
        
     }
 
+    private void FixedUpdate() {
+        rigidbody.velocity = transform.forward * (speed * MovementAxis.magnitude) * Time.fixedDeltaTime;
+
+         
+    }
 
 
+    void Jump()
+    {
+
+
+
+    }
 
  
     private void LateUpdate() {
