@@ -64,9 +64,9 @@ public class Playerr : NetworkBehaviour
 
  
 
-     enum Estados {Idle,Playing,Death}
+     public enum Estados {Idle,Playing,Death,Punch}
 
-        Estados states = Estados.Idle;
+     public   Estados states = Estados.Idle;
 
 
     [SerializeField]
@@ -89,9 +89,12 @@ public class Playerr : NetworkBehaviour
 
     
     
-    float punchrate = 1;
 
-    float netxtpunch = 0;
+    
+
+    Vector3 transpeed;
+
+    Vector3 lastpos;
 
     void Awake()
     {
@@ -118,7 +121,7 @@ public class Playerr : NetworkBehaviour
     private void Start() {
         
         cam = gameObject.GetComponentInChildren<Camera>();
-
+        lastpos = transform.position;
 
 
     }
@@ -133,6 +136,13 @@ public class Playerr : NetworkBehaviour
         }
        if(IsLocalPlayer)
        {
+           if(lastpos != transform.position)
+           {
+               transpeed = transform.position - lastpos;
+               transpeed /= Time.deltaTime;
+               lastpos = transform.position;
+           }
+
            
            if(nameset == true)
            {
@@ -166,18 +176,37 @@ public class Playerr : NetworkBehaviour
                                     transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
                                 }
                                 
+
+                                //transform.position += transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime;
                                 rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
 
-                                //transform.position += transform.forward * (15 * MovementAxis.magnitude) * Time.deltaTime;
 
-                           
-                                if(inputActions.Movement.Action.triggered && Time.time > netxtpunch)
+                                //Debug.Log(rigidbody.velocity.magnitude);
+                                if(inputActions.Movement.Action.triggered)
                                 {
                                     anim.SetTrigger("Punch");
-                                    netxtpunch = Time.time + punchrate;
-                                    rigidbody.AddForce(transform.forward * 5500 * Time.deltaTime,ForceMode.Impulse);
-                                    AttackPlayerServerRpc();
+                                    rigidbody.velocity = transform.forward * 30;
+                                    states = Estados.Punch;
                                 }
+                                
+
+                break;
+
+                  case Estados.Punch:
+            
+                                
+                                
+                                Debug.Log(transpeed.magnitude);
+
+                                    
+
+                                AttackPlayerServerRpc();
+                        
+                               if(transpeed.magnitude < 4)
+                                {
+                                    rigidbody.velocity = Vector3.zero;
+                                    states = Estados.Playing;
+                               }
                                 
 
                 break;
@@ -227,7 +256,6 @@ public class Playerr : NetworkBehaviour
                                     BlendValue = rigidbody.velocity.magnitude / maxSpeed;
 
                                     BlendValue = Mathf.Clamp(BlendValue,0,1);
-                                    
                                     anim.SetFloat("Blending",BlendValue);
                             }   
                                                     
@@ -368,19 +396,16 @@ public class Playerr : NetworkBehaviour
    [ClientRpc]
     void CleanNamesClientRpc(int LocalID)
     {
-        Debug.Log("Papito");
         characterID.Value = LocalID;
 
           for(int i = 0; i < characters.Length; i++)
             {
                 if(characters[i].GetComponent<Animator>() != anim)
                 {
-                    Debug.Log("Este no es el bueno");
                     characters[i].SetActive(false);
                 }
                 else
                 {
-                    Debug.Log("Este si >:) que es " + characters[characterID.Value].name);
                 }
             }
 
