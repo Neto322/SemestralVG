@@ -13,7 +13,7 @@ public class ConnectionManager : MonoBehaviour
     GameObject UI;
 
 
-    
+
 
     //Pasa del lado del server.
     public void Host()
@@ -22,7 +22,7 @@ public class ConnectionManager : MonoBehaviour
       
 
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-        NetworkManager.Singleton.StartHost(new Vector3(0,5,0),Quaternion.identity);
+        NetworkManager.Singleton.StartHost(randomPos(),Quaternion.identity);
 
         
     }
@@ -30,7 +30,7 @@ public class ConnectionManager : MonoBehaviour
     private void ApprovalCheck(byte[] connectionData, ulong clientID, NetworkManager.ConnectionApprovedDelegate callback)
     {
         bool approve = System.Text.Encoding.ASCII.GetString(connectionData) == "Password1234";
-        callback(true,null,approve,  new Vector3(0,5,0),Quaternion.identity);
+        callback(true,null,approve,  randomPos(),Quaternion.identity);
     }
 
     public void Join()
@@ -48,6 +48,17 @@ public class ConnectionManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    Vector3 randomPos()
+    {
+        float x = Random.Range(0,40);
+
+        float y = 1.3f;
+
+        float z = Random.Range(0,40);
+
+        return new Vector3(x,y,z);
     }
 
   

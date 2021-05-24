@@ -26,7 +26,9 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     float speed;
 
+    
     Transform cam;
+
 
     Quaternion targetRotation;
 
@@ -42,7 +44,7 @@ public class Playerr : NetworkBehaviour
  
 
    
-    public NetworkVariable<string> nombrenNet = new NetworkVariable<string>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, "Default");
+    public NetworkVariable<string> nombrenNet = new NetworkVariable<string>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, "Name");
 
   
      public GUIStyle  textfieldStyle;
@@ -61,7 +63,8 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     GameObject[] characters;
 
-
+    [SerializeField]
+    Camera playercam;
 
 
      enum Estados {Idle,Playing,Death}
@@ -150,7 +153,6 @@ public class Playerr : NetworkBehaviour
                                 }
                                 
                                 rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
-
 
                                 rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxSpeed);
                                 
@@ -325,22 +327,26 @@ public class Playerr : NetworkBehaviour
 
 
     
-  
+       
 
         
 
          if(IsLocalPlayer)
        {
             if(nameset == false)
-            GUI.Label(new Rect(Screen.width * 0.43f , Screen.height * 0.1f , 100 , 30 ),"Select Fighter", titlestyle);
+            GUI.Label(new Rect(Screen.width * 0.5f , Screen.height * 0.1f , 100 , 30 ),"Select Fighter", titlestyle);
+
+          
+
+
            if(nameset == false)
-        nombrenNet.Value = GUI.TextField(new Rect( Screen.width * 0.45f ,Screen.height * 0.7f , 80, 20), nombrenNet.Value, 8,textfieldStyle);
+        nombrenNet.Value = GUI.TextField(new Rect( Screen.width * 0.43f ,Screen.height * 0.6f , 400, 160), nombrenNet.Value, 8,textfieldStyle);
 
 
         if(nameset == false)
         {
                 characters[LocalID].SetActive(true);
-               if (GUI.Button(new Rect(Screen.width * 0.3f,Screen.height * 0.5f, 90, 30), "<"))
+               if (GUI.Button(new Rect(Screen.width * 0.3f,Screen.height * 0.5f, 180, 60), "<"))
                 {  
                   if(LocalID == 0)
                     {
@@ -368,7 +374,7 @@ public class Playerr : NetworkBehaviour
 
                 }
 
-                 if (GUI.Button(new Rect(Screen.width * 0.6f,Screen.height * 0.5f, 90, 30), ">"))
+                 if (GUI.Button(new Rect(Screen.width * 0.7f,Screen.height * 0.5f, 180, 60), ">"))
                 {
                     if(LocalID == 7)
                     {
@@ -397,7 +403,7 @@ public class Playerr : NetworkBehaviour
 
                 }
 
-              if (GUI.Button(new Rect(Screen.width * 0.45f,Screen.height * 0.8f, 90, 30), "Start Game"))
+              if (GUI.Button(new Rect(Screen.width * 0.5f,Screen.height * 0.8f, 180, 60), "Start Game"))
                 {
                     states = Estados.Playing;
                     nameset = true;
@@ -405,7 +411,7 @@ public class Playerr : NetworkBehaviour
                     {
                         characters[i].SetActive(false);
                     }
-
+                    playercam.gameObject.SetActive(false);
                     anim = GetComponentInChildren<Animator>();
                     CleanNamesServerRpc(LocalID,NetworkManager.Singleton.LocalClientId);
 
