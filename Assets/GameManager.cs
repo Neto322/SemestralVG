@@ -56,8 +56,8 @@ public class GameManager : MonoBehaviour
         {
             foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
             {
-                obj.PlayerObject.transform.position = new Vector3(-31,16.72f,-191);
-                obj.PlayerObject.GetComponent<Playerr>().cam.transform.position = new Vector3(-28.94f,36.7f,-170.5f);
+                obj.PlayerObject.transform.position = new Vector3(-10.15f,2.3f,-196);
+                obj.PlayerObject.GetComponent<Playerr>().cam.transform.position = new Vector3(-28.94f,52f,-146f);
                 obj.PlayerObject.GetComponent<Playerr>().cam.transform.eulerAngles = new Vector3(45f,180f,0f);
             }
         }
