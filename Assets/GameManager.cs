@@ -7,10 +7,12 @@ using MLAPI;
 using MLAPI.Messaging;
 
 public class GameManager : MonoBehaviour
-{
+{   
+    public NetworkVariable<int> clientsList = new NetworkVariable<int>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, 100);
+
     public static GameManager instance = null;
 
-    int PlayerList;
+  
 
     int ReadyList;
 
@@ -26,44 +28,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+   
+  
+    private void OnGUI() {
         
+       
+    
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc]
     public void GameStartServerRpc ()
     {
-        PlayerList = 0;
         
-        ReadyList = 0;
 
-        foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
-        {
-            if(obj.PlayerObject.GetComponent<Playerr>().gameStates == Playerr.GameStates.Ready)
-            {
-                ReadyList++;
-            }
-        }
-
-         foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
-        {
-            PlayerList++;
-        }
-
-        if(ReadyList == PlayerList)
-        {
+        
             foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                obj.PlayerObject.transform.position = new Vector3(-10.15f,2.3f,-196);
-                obj.PlayerObject.GetComponent<Playerr>().cam.transform.position = new Vector3(-28.94f,52f,-146f);
-                obj.PlayerObject.GetComponent<Playerr>().cam.transform.eulerAngles = new Vector3(45f,180f,0f);
+            {   
+                Debug.Log("Hay aqui " + obj.PlayerObject.name);
+
+               obj.PlayerObject.GetComponent<Playerr>().gameStates = Playerr.GameStates.GameStart;
+               
+                
             }
+        
+
+
+     
         }
         
 
-        
+      
     }
 
    
@@ -71,4 +65,4 @@ public class GameManager : MonoBehaviour
   
 
 
-}
+

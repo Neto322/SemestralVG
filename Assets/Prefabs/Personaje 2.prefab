@@ -297,6 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Turnspeed: 15
   speed: 90
+  cam: {fileID: 0}
   anim: {fileID: 8490599114633480128}
   maxSpeed: 417.4
   nombrenNet:
@@ -458,8 +459,12 @@ MonoBehaviour:
     m_Bits: 256
   range: 4
   punchposition: {fileID: 1710002656476517406}
+  vida:
+    m_InternalValue: 0
+  damage:
+    m_InternalValue: 0
   punchStrenght: 200
-  menu: {fileID: 0}
+  punchDamage: 800
 --- !u!136 &5134190077016055226
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -505,7 +510,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &4900894478930328799
 MonoBehaviour:

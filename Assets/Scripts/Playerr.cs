@@ -40,6 +40,7 @@ public class Playerr : NetworkBehaviour
 
    int LocalID = 0;
 
+
  
 
    
@@ -92,11 +93,13 @@ public class Playerr : NetworkBehaviour
     Transform punchposition;
 
     
-    
+    public NetworkVariable<float> vida = new NetworkVariable<float>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, 0);
+ 
 
-    
+    bool position = false;
 
    
+    public NetworkVariable<float> damage = new NetworkVariable<float>(new NetworkVariableSettings {WritePermission = NetworkVariablePermission.OwnerOnly}, 0);
 
 
     bool powering = false;
@@ -106,12 +109,14 @@ public class Playerr : NetworkBehaviour
 
     float TimeHold = 0;
 
-
-    float punchDamage = 0;
+    [SerializeField]
+    float punchDamage;
 
     float rate;
+    
+    
 
- 
+    
 
     int clientList;
 
@@ -148,8 +153,8 @@ public class Playerr : NetworkBehaviour
 
         inputActions.Movement.ActionEnd.performed += x => Unhold();
 
-        CountPlayersServerRpc();
-
+        
+        
 
          
     }
@@ -157,7 +162,7 @@ public class Playerr : NetworkBehaviour
   
     // Update is called once per frame
     void Update()
-    {
+    {   
         if(!IsLocalPlayer)
         {
             
@@ -165,7 +170,6 @@ public class Playerr : NetworkBehaviour
         }
        if(IsLocalPlayer)
        {
-           
            
            if(nameset == true)
            {
@@ -177,8 +181,8 @@ public class Playerr : NetworkBehaviour
 
            }
 
-     
 
+           
             
             switch(states)
             {
@@ -209,6 +213,14 @@ public class Playerr : NetworkBehaviour
                 break;
 
                     case Estados.Playing:
+                        
+                        if(position  == true)
+                        {
+                            transform.position = new Vector3(-10.15f,2.3f,-196);
+                            position = false;
+
+                        }
+
                         inputActions.Movement.ActionStart.Enable();
                         if(AxisInput != Vector2.zero)
                         {
@@ -223,7 +235,7 @@ public class Playerr : NetworkBehaviour
                         //transform.position += transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime;
                         rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
                         //rigidbody.velocity = transform.forward * (speed * 10 * MovementAxis.magnitude) * Time.deltaTime;
-                                   
+                                  
 
                 break;
 
@@ -282,8 +294,8 @@ public class Playerr : NetworkBehaviour
 
             switch(states)
             {
-                case Estados.Idle:
-
+                case Estados.Charging:
+                    
 
                 
                 break;
@@ -339,24 +351,12 @@ public class Playerr : NetworkBehaviour
         Gizmos.DrawWireSphere(punchposition.position,range);
     }
 
-      [ServerRpc]
-    void StartGameServerRpc()
-    {   
-        gameStates = GameStates.Ready;
-    }
+   
 
     
 
 
-    [ServerRpc]
-    void CountPlayersServerRpc()
-    {   
-        clientList = 0;
-        foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
-        {
-            clientList++;
-        }
-    }
+   
 
     [ServerRpc]
     void AttackPlayerServerRpc()
@@ -387,7 +387,9 @@ public class Playerr : NetworkBehaviour
                     GameObject gameObj = obj.PlayerObject.gameObject;
                     Vector3 direction = gameObj.transform.position -  transform.position;
 
-                    gameObj.GetComponent<Playerr>().KnockbackServerRpc(direction);
+                    ulong ID = obj.PlayerObject.GetComponent<NetworkObject>().NetworkObjectId;
+
+                    gameObj.GetComponent<Playerr>().KnockbackServerRpc(direction,ID);
 
 
                 }
@@ -398,19 +400,21 @@ public class Playerr : NetworkBehaviour
 
 
    [ServerRpc(RequireOwnership = false)]
-   public void KnockbackServerRpc(Vector3 direction)
+   public void KnockbackServerRpc(Vector3 direction,ulong ID)
    {
-        KnockbackClientRpc(direction);
+        KnockbackClientRpc(direction,ID);
    }
 
 
 
     [ClientRpc]
 
-   public  void KnockbackClientRpc(Vector3 direction)
+   public  void KnockbackClientRpc(Vector3 direction,ulong ID)
    {
-        
-        rigidbody.AddForce(direction.normalized * 1500 * Time.deltaTime,ForceMode.Impulse);
+       vida.Value += 1200 * Time.deltaTime;
+
+       
+        rigidbody.AddForce(direction.normalized * vida.Value * Time.deltaTime,ForceMode.Impulse);
 
    }
 
@@ -496,7 +500,17 @@ public class Playerr : NetworkBehaviour
     }
 
 
+    [ServerRpc(RequireOwnership = false)]
+    void PositionServerRpc()
+    {
+        PositionClientRpc();
+    }
 
+    [ClientRpc]
+    void PositionClientRpc()
+    {
+            
+    }
    
   
   
@@ -504,26 +518,23 @@ public class Playerr : NetworkBehaviour
     {
 
 
-        if(IsHost)
-        {
-             if (GUI.Button(new Rect(Screen.width * 0.9f,Screen.height * 0.1f, 100, 50),"Start Match" ))
+         if (GUI.Button(new Rect(Screen.width * 0.9f,Screen.height * 0.1f, 100, 50),"Start Match" ))
               {
                  
-                   
+                    PositionServerRpc();
 
                   
-                   GameManager.instance.GameStartServerRpc();
+                  
 
 
               }
 
-            GUI.Label(new Rect(Screen.width * 0.7f , Screen.height * 0.2f , 250 , 30 ),"Connected players " + clientList);
 
 
                     
 
               
-        }
+        
 
 
     
@@ -605,13 +616,15 @@ public class Playerr : NetworkBehaviour
 
               if (GUI.Button(new Rect(Screen.width * 0.5f,Screen.height * 0.8f, 180, 60), "Start Game"))
                 {
+                    
                     cam.transform.SetParent(null);
-                    cam.transform.position = new Vector3(0,52,62);
-                    cam.transform.eulerAngles = new Vector3(45,180,0);
+                    cam.transform.position = new Vector3(-28.94f,52f,-146f);
+                    cam.transform.eulerAngles = new Vector3(45f,180f,0f);
                     states = Estados.Playing;
+                    position = true;
                     nameset = true;
-                    StartGameServerRpc();
-                    CountPlayersServerRpc();
+                     
+                    
 
                     for(int i = 0; i < characters.Length; i++)
                     {
@@ -647,7 +660,7 @@ public class Playerr : NetworkBehaviour
         {
             rigidbody.velocity = Vector3.zero;
             rate = TimeHold;
-            Debug.Log("Aguatno " + rate);
+            damage.Value = punchDamage * rate;
             states = Estados.Punch;
         }
 
