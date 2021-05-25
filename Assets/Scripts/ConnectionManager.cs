@@ -22,7 +22,7 @@ public class ConnectionManager : MonoBehaviour
       
 
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-        NetworkManager.Singleton.StartHost(new Vector3(0,1.3f,0),Quaternion.identity);
+        NetworkManager.Singleton.StartHost(randomPos(),Quaternion.identity);
 
         
     }
@@ -54,7 +54,7 @@ public class ConnectionManager : MonoBehaviour
     {
         float x = Random.Range(0,40);
 
-        float y = 1.3f;
+        float y = 4f;
 
         float z = Random.Range(0,40);
 

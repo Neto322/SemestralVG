@@ -34,7 +34,7 @@ public class Menu : MonoBehaviour
               {
                   UI.SetActive(false);
                   NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-                  NetworkManager.Singleton.StartHost(new Vector3(0,1.3f,0),Quaternion.identity);
+                  NetworkManager.Singleton.StartHost(randomPos(),Quaternion.identity);
 
               }
 
@@ -62,7 +62,16 @@ public class Menu : MonoBehaviour
      private void ApprovalCheck(byte[] connectionData, ulong clientID, NetworkManager.ConnectionApprovedDelegate callback)
     {
         bool approve = System.Text.Encoding.ASCII.GetString(connectionData) == "Password1234";
-        callback(true,null,approve,  new Vector3(0,1.3f,0) ,Quaternion.identity);
+        callback(true,null,approve,  randomPos() ,Quaternion.identity);
     }
+    Vector3 randomPos()
+        {
+            float x = Random.Range(-45,30);
 
+            float y = 4f;
+
+            float z = Random.Range(-32,40);
+
+            return new Vector3(x,y,z);
+        }
 }

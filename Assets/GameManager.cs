@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
 
+    int PlayerList;
+
+    int ReadyList;
+
     void Awake()
     {
         if(instance == null)
@@ -31,10 +35,30 @@ public class GameManager : MonoBehaviour
     [ServerRpc]
     public void GameStartServerRpc ()
     {
+        PlayerList = 0;
+        
+        ReadyList = 0;
+
         foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
         {
-            Debug.Log("Jugador " + obj.PlayerObject.name + " esta " +  obj.PlayerObject.GetComponent<Playerr>().gameStates);
+            if(obj.PlayerObject.GetComponent<Playerr>().gameStates == Playerr.GameStates.Ready)
+            {
+                ReadyList++;
+            }
         }
+
+         foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            PlayerList++;
+        }
+
+        
+    }
+
+    [ServerRpc]
+    public void PositionPlayers()
+    {
+        
     }
 
   

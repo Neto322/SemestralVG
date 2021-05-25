@@ -231,7 +231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4404399591036723332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: 3.07, z: 4.77}
+  m_LocalPosition: {x: 0.02, y: 3.07, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5134190077016055175}
@@ -450,12 +450,13 @@ MonoBehaviour:
   - {fileID: 612149931307358052}
   - {fileID: 3692235724151202471}
   - {fileID: 4155517860611631813}
+  gameStates: 0
   states: 0
   text: {fileID: 6810818402072800973}
   playerlayer:
     serializedVersion: 2
     m_Bits: 256
-  range: 3
+  range: 4
   punchposition: {fileID: 1710002656476517406}
   punchStrenght: 200
   menu: {fileID: 0}
@@ -961,7 +962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1756740558568859813, guid: dcdf038c1a1c1c24bae0c2d8b8731b2d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4535496417389206753, guid: dcdf038c1a1c1c24bae0c2d8b8731b2d, type: 3}
       propertyPath: m_Materials.Array.data[0]

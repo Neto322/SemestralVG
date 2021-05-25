@@ -507,10 +507,15 @@ public class Playerr : NetworkBehaviour
 
         if(IsHost)
         {
-             if (GUI.Button(new Rect(Screen.width * 0.9f,Screen.height * 0.1f, 100, 50),"Start Game" ))
+             if (GUI.Button(new Rect(Screen.width * 0.9f,Screen.height * 0.1f, 100, 50),"Start Match" ))
               {
-                GameManager.instance.GameStartServerRpc();
-                
+                 
+                   
+
+                  
+                   GameManager.instance.GameStartServerRpc();
+
+
               }
 
             GUI.Label(new Rect(Screen.width * 0.7f , Screen.height * 0.2f , 250 , 30 ),"Connected players " + clientList);
@@ -607,6 +612,8 @@ public class Playerr : NetworkBehaviour
                     states = Estados.Playing;
                     nameset = true;
                     StartGameServerRpc();
+                    CountPlayersServerRpc();
+
                     for(int i = 0; i < characters.Length; i++)
                     {
                         characters[i].SetActive(false);

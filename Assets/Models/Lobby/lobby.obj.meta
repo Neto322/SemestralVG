@@ -3,7 +3,22 @@ guid: f5bf0a8c857b32e46b8acabe80d4b0b2
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: banca
+    second: {fileID: 2100000, guid: 5d7147f63db572644909bce343c32ee3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: casilleros
+    second: {fileID: 2100000, guid: 30e6c86cd60d8ac479f5ede1397b629f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: paredes
+    second: {fileID: 2100000, guid: b6aa08837f4e30340bd6c85ae1e32c83, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
