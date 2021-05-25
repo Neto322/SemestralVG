@@ -64,7 +64,7 @@ public class Playerr : NetworkBehaviour
 
  
 
-     public enum Estados {Idle,Playing,Death,Punch}
+     public enum Estados {Idle,Playing,Death,Charging,Punch}
 
      public   Estados states = Estados.Idle;
 
@@ -140,6 +140,8 @@ public class Playerr : NetworkBehaviour
         inputActions.Movement.ActionStart.performed += x => Hold();
 
         inputActions.Movement.ActionEnd.performed += x => Unhold();
+
+         
     }
     
   
@@ -148,6 +150,7 @@ public class Playerr : NetworkBehaviour
     {
         if(!IsLocalPlayer)
         {
+            
             cam.gameObject.SetActive(false);
         }
        if(IsLocalPlayer)
@@ -169,6 +172,26 @@ public class Playerr : NetworkBehaviour
             
             switch(states)
             {
+                case Estados.Charging:
+                    inputActions.Movement.ActionStart.Enable();
+                     if(AxisInput != Vector2.zero)
+                        {
+                            angle = Mathf.Atan2(AxisInput.x,AxisInput.y);
+                            angle = Mathf.Rad2Deg * angle;
+                            angle += cam.transform.eulerAngles.y;
+                            targetRotation = Quaternion.Euler(0,angle,0);
+                            transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
+                        }
+                    rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
+
+                    if(TimeHold <= 1)
+                    {
+                        TimeHold += 1f * Time.deltaTime;
+                    }
+                    
+
+                
+                break;
                 case Estados.Idle:
               
 
@@ -176,6 +199,7 @@ public class Playerr : NetworkBehaviour
                 break;
 
                     case Estados.Playing:
+                        inputActions.Movement.ActionStart.Enable();
                         if(AxisInput != Vector2.zero)
                         {
                             angle = Mathf.Atan2(AxisInput.x,AxisInput.y);
@@ -188,28 +212,34 @@ public class Playerr : NetworkBehaviour
                            
                         //transform.position += transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime;
                         rigidbody.AddForce(transform.forward * (speed * MovementAxis.magnitude) * Time.deltaTime,ForceMode.Impulse);
-
-                        if(powering == true)
-                        {
-                             TimeHold += Time.deltaTime;
-                            Debug.Log("Filling " + TimeHold);
-                        }                    
+                        //rigidbody.velocity = transform.forward * (speed * 10 * MovementAxis.magnitude) * Time.deltaTime;
+                                   
 
                 break;
 
                   case Estados.Punch:
-            
-                                powering = false;
+                                inputActions.Movement.ActionStart.Disable();
+
+                                rate -= Time.deltaTime;
+                                 if(AxisInput != Vector2.zero)
+                                {
+                                    angle = Mathf.Atan2(AxisInput.x,AxisInput.y);
+                                    angle = Mathf.Rad2Deg * angle;
+                                    angle += cam.transform.eulerAngles.y;
+                                    targetRotation = Quaternion.Euler(0,angle,0);
+                                    transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,Turnspeed * Time.deltaTime);
+                                }
                                 
-                                transform.position += transform.forward * punchStrenght * Time.deltaTime;
+                                //transform.position += transform.forward * punchStrenght * Time.deltaTime;
                                 //rigidbody.velocity = transform.forward * punchStrenght * 1000 * Time.deltaTime;
+                                rigidbody.AddForce(transform.forward * punchStrenght * Time.deltaTime,ForceMode.Impulse);
 
-
+                               
 
 
                                 AttackPlayerServerRpc();
                         
-                               if( Time.time > rate)
+                               if( rate <= 0)
                                 {
                                     //rigidbody.velocity = Vector3.zero;
                                     states = Estados.Playing;
@@ -243,15 +273,24 @@ public class Playerr : NetworkBehaviour
             switch(states)
             {
                 case Estados.Idle:
-              
+
 
                 
                 break;
 
+                case Estados.Punch:
+                    if(anim)
+                    {
+                        anim.SetBool("Punch",true);
+                    }
+
+                
+                break;
                     case Estados.Playing:
 
                        if(anim)
                             {
+                                anim.SetBool("Punch",false);
                                 if(AxisInput != Vector2.zero)
                                     {
                                         anim.SetBool("Move",true);
@@ -260,7 +299,7 @@ public class Playerr : NetworkBehaviour
 
                                    
                                         
-                                    BlendValue = rigidbody.velocity.magnitude / maxSpeed;
+                                    BlendValue = MovementAxis.magnitude;
 
                                     BlendValue = Mathf.Clamp(BlendValue,0,1);
                                     anim.SetFloat("Blending",BlendValue);
@@ -314,6 +353,7 @@ public class Playerr : NetworkBehaviour
            {    
                if(obj.PlayerObject.GetComponent<NetworkObject>().NetworkObjectId == col.GetComponent<NetworkObject>().NetworkObjectId)
                 {
+                    
                     Debug.Log("Si pega" + obj.PlayerObject.name);
                     GameObject gameObj = obj.PlayerObject.gameObject;
                     Vector3 direction = gameObj.transform.position -  transform.position;
@@ -340,7 +380,8 @@ public class Playerr : NetworkBehaviour
 
    public  void KnockbackClientRpc(Vector3 direction)
    {
-        rigidbody.AddForce(direction.normalized * 2500 * Time.deltaTime,ForceMode.Impulse);
+        
+        rigidbody.AddForce(direction.normalized * 1500 * Time.deltaTime,ForceMode.Impulse);
 
    }
 
@@ -544,18 +585,22 @@ public class Playerr : NetworkBehaviour
 
     void Hold()
     {
-        if(states == Estados.Playing)
-        {
-           powering = true;
-        }
+        TimeHold = 0;
+        states = Estados.Charging;
     }
     
     void Unhold()
     {
-        powering = false;
-        rate = Time.time + TimeHold;
-        anim.SetTrigger("Punch");
-        states = Estados.Punch;
+        if(states == Estados.Charging)
+        {
+            rigidbody.velocity = Vector3.zero;
+            rate = TimeHold;
+            Debug.Log("Aguatno " + rate);
+            states = Estados.Punch;
+        }
+
+       
+      
         
 
     }
