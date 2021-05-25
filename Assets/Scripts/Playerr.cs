@@ -107,7 +107,8 @@ public class Playerr : NetworkBehaviour
 
     float rate;
 
-
+    [SerializeField]
+    GameObject menu;
 
     void Awake()
     {
@@ -134,8 +135,9 @@ public class Playerr : NetworkBehaviour
     private void Start() {
         
         cam = gameObject.GetComponentInChildren<Camera>();
-        
 
+        menu = GameObject.FindGameObjectWithTag("Menu");
+        
 
         inputActions.Movement.ActionStart.performed += x => Hold();
 
@@ -186,7 +188,7 @@ public class Playerr : NetworkBehaviour
 
                     if(TimeHold <= 1)
                     {
-                        TimeHold += 1f * Time.deltaTime;
+                        TimeHold += 0.8f * Time.deltaTime;
                     }
                     
 
@@ -571,8 +573,10 @@ public class Playerr : NetworkBehaviour
                     CleanNamesServerRpc(LocalID,NetworkManager.Singleton.LocalClientId);
 
                 }
+
         }
-      
+       
+               
        }
            
        }   

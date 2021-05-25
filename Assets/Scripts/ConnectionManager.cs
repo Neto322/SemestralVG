@@ -22,7 +22,7 @@ public class ConnectionManager : MonoBehaviour
       
 
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-        NetworkManager.Singleton.StartHost(randomPos(),Quaternion.identity);
+        NetworkManager.Singleton.StartHost(new Vector3(0,1.3f,0),Quaternion.identity);
 
         
     }
@@ -60,6 +60,8 @@ public class ConnectionManager : MonoBehaviour
 
         return new Vector3(x,y,z);
     }
+
+    
 
   
 }
