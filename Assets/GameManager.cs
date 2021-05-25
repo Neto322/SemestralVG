@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void GameStartServerRpc ()
     {
         PlayerList = 0;
@@ -52,14 +52,21 @@ public class GameManager : MonoBehaviour
             PlayerList++;
         }
 
+        if(ReadyList == PlayerList)
+        {
+            foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
+            {
+                obj.PlayerObject.transform.position = new Vector3(-31,16.72f,-191);
+                obj.PlayerObject.GetComponent<Playerr>().cam.transform.position = new Vector3(-28.94f,36.7f,-170.5f);
+                obj.PlayerObject.GetComponent<Playerr>().cam.transform.eulerAngles = new Vector3(45f,180f,0f);
+            }
+        }
+        
+
         
     }
 
-    [ServerRpc]
-    public void PositionPlayers()
-    {
-        
-    }
+   
 
   
 

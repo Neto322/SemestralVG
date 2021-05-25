@@ -26,7 +26,7 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     float speed;
 
-    Camera cam;
+    public Camera cam;
 
 
     Quaternion targetRotation;
@@ -111,8 +111,7 @@ public class Playerr : NetworkBehaviour
 
     float rate;
 
-    [SerializeField]
-    GameObject menu;
+ 
 
     int clientList;
 
@@ -142,7 +141,7 @@ public class Playerr : NetworkBehaviour
         
         cam = gameObject.GetComponentInChildren<Camera>();
 
-        menu = GameObject.FindGameObjectWithTag("Menu");
+       
         
 
         inputActions.Movement.ActionStart.performed += x => Hold();
