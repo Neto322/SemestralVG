@@ -17,6 +17,6 @@ Documento de diseño.
 https://docs.google.com/document/d/1UvHlChtrVTUt_SCtk1Kz2rKLcd6etrHmB9q1reYdv2Y/edit?usp=sharing
 
 Gameplay.
-https://github.com/Neto322/SemestralVG/releases/tag/0.1
+https://drive.google.com/file/d/11Fx0zvc35f9xq2lprEXbln2IosJbONo6/view?usp=sharing
 
 
