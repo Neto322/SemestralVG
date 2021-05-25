@@ -231,7 +231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4404399591036723332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: 3.07, z: 4.26}
+  m_LocalPosition: {x: 0.02, y: 3.07, z: 4.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5134190077016055175}
@@ -455,9 +455,10 @@ MonoBehaviour:
   playerlayer:
     serializedVersion: 2
     m_Bits: 256
-  range: 2.5
+  range: 3
   punchposition: {fileID: 1710002656476517406}
   punchStrenght: 200
+  menu: {fileID: 0}
 --- !u!136 &5134190077016055226
 CapsuleCollider:
   m_ObjectHideFlags: 0

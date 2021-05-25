@@ -12,7 +12,7 @@ public class Menu : MonoBehaviour
     {
             if(NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
             {
-                if (GUI.Button(new Rect(Screen.width * 0.05f,Screen.height * 0.05f, 100, 40), "Stop"))
+                if (GUI.Button(new Rect(Screen.width * 0.05f,Screen.height * 0.05f, 100, 40), "Leave Match"))
             {
                 if (NetworkManager.Singleton.IsHost)
                 {
@@ -22,7 +22,7 @@ public class Menu : MonoBehaviour
 
                 else if (NetworkManager.Singleton.IsClient)
                 {
-                                                         UI.SetActive(true);
+                                      UI.SetActive(true);
 
                    NetworkManager.Singleton.StopClient();
                 }
@@ -30,7 +30,7 @@ public class Menu : MonoBehaviour
             }
             else
             {
-              if (GUI.Button(new Rect(Screen.width * 0.278f,Screen.height * 0.55f, 420, 50),"" ))
+              if (GUI.Button(new Rect(Screen.width * 0.1f,Screen.height * 0.9f, 100, 50),"Create Game" ))
               {
                   UI.SetActive(false);
                   NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
@@ -38,15 +38,16 @@ public class Menu : MonoBehaviour
 
               }
 
-              if (GUI.Button(new Rect(Screen.width * 0.278f,Screen.height * 0.69f, 420, 50),"" ))
+              if (GUI.Button(new Rect(Screen.width * 0.4f,Screen.height * 0.9f, 100, 50),"Join Game" ))
               {
                   UI.SetActive(false);
                   NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.ASCII.GetBytes("Password1234");
+                  
                   NetworkManager.Singleton.StartClient();
 
               }
 
-              if (GUI.Button(new Rect(Screen.width * 0.278f,Screen.height * 0.86f, 420, 50),"" ))
+              if (GUI.Button(new Rect(Screen.width * 0.7f,Screen.height * 0.9f, 100, 50),"Quit Game" ))
               {
                   
                   Application.Quit();

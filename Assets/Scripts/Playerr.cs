@@ -66,6 +66,10 @@ public class Playerr : NetworkBehaviour
 
      public enum Estados {Idle,Playing,Death,Charging,Punch}
 
+     public enum GameStates {Waiting,Ready,GameStart,Ended}
+
+     public GameStates gameStates = GameStates.Waiting;
+
      public   Estados states = Estados.Idle;
 
 
@@ -110,6 +114,8 @@ public class Playerr : NetworkBehaviour
     [SerializeField]
     GameObject menu;
 
+    int clientList;
+
     void Awake()
     {
         
@@ -142,6 +148,9 @@ public class Playerr : NetworkBehaviour
         inputActions.Movement.ActionStart.performed += x => Hold();
 
         inputActions.Movement.ActionEnd.performed += x => Unhold();
+
+        CountPlayersServerRpc();
+
 
          
     }
@@ -331,6 +340,25 @@ public class Playerr : NetworkBehaviour
         Gizmos.DrawWireSphere(punchposition.position,range);
     }
 
+      [ServerRpc]
+    void StartGameServerRpc()
+    {   
+        gameStates = GameStates.Ready;
+    }
+
+    
+
+
+    [ServerRpc]
+    void CountPlayersServerRpc()
+    {   
+        clientList = 0;
+        foreach(var obj in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            clientList++;
+        }
+    }
+
     [ServerRpc]
     void AttackPlayerServerRpc()
     {
@@ -356,7 +384,7 @@ public class Playerr : NetworkBehaviour
                if(obj.PlayerObject.GetComponent<NetworkObject>().NetworkObjectId == col.GetComponent<NetworkObject>().NetworkObjectId)
                 {
                     
-                    Debug.Log("Si pega" + obj.PlayerObject.name);
+                    
                     GameObject gameObj = obj.PlayerObject.gameObject;
                     Vector3 direction = gameObj.transform.position -  transform.position;
 
@@ -476,9 +504,22 @@ public class Playerr : NetworkBehaviour
      void OnGUI()
     {
 
-        // draw the name with a shadow (colored for buf)	
 
-        
+        if(IsHost)
+        {
+             if (GUI.Button(new Rect(Screen.width * 0.9f,Screen.height * 0.1f, 100, 50),"Start Game" ))
+              {
+                GameManager.instance.GameStartServerRpc();
+                
+              }
+
+            GUI.Label(new Rect(Screen.width * 0.7f , Screen.height * 0.2f , 250 , 30 ),"Connected players " + clientList);
+
+
+                    
+
+              
+        }
 
 
     
@@ -565,6 +606,7 @@ public class Playerr : NetworkBehaviour
                     cam.transform.eulerAngles = new Vector3(45,180,0);
                     states = Estados.Playing;
                     nameset = true;
+                    StartGameServerRpc();
                     for(int i = 0; i < characters.Length; i++)
                     {
                         characters[i].SetActive(false);
